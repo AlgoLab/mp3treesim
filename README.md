@@ -1,4 +1,5 @@
 # MP3-treesim
+[![PyPI version](https://badge.fury.io/py/mp3treesim.svg)](https://pypi.org/project/mp3treesim/)
 
 Triplet-based similarity score for fully multi-labeled trees with poly-occurring labels
 
