@@ -16,7 +16,7 @@ pip3 install mp3treesim
 ```
 usage: mp3treesim [-h] [-i | -u | -g] TREE TREE
 
-mp3treesim <------------------------- FIX THIS
+mp3treesim
 
 positional arguments:
   TREE        Paths to the trees
@@ -72,3 +72,8 @@ digraph Tree {
     3 -> 6;
 }
 ```
+
+## Requirements
+- `numpy` >= 1.18.1
+- `networkx` >= 2.4
+- `pygraphviz` >= 1.5 (requires libgraphviz-dev)
