@@ -1,16 +1,22 @@
 # MP3-treesim
 [![PyPI version](https://badge.fury.io/py/mp3treesim.svg)](https://pypi.org/project/mp3treesim/)
+[![install with bioconda](https://img.shields.io/badge/install%20with-bioconda-brightgreen.svg?style=flat)](http://bioconda.github.io/recipes/mp3treesim/README.html)
 
 Triplet-based similarity score for fully multi-labeled trees with poly-occurring labels
 
-Link to publication: TBD
+Link to publication: https://www.biorxiv.org/content/10.1101/2020.04.14.040550v1
 
 ## Installation
 
+Using pip
 ```bash
 pip3 install mp3treesim
 ```
 
+Using bioconda
+```bash
+conda install mp3treesim
+```
 ## Usage from Command Line (CLI)
 
 ```
@@ -77,3 +83,6 @@ digraph Tree {
 - `numpy` >= 1.18.1
 - `networkx` >= 2.4
 - `pygraphviz` >= 1.5 (requires libgraphviz-dev)
+
+## Supplementary material
+The supplementary materials and the settings to reproduce the experiments are in https://github.com/AlgoLab/mp3treesim_supp
