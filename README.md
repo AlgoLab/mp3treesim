@@ -86,3 +86,6 @@ digraph Tree {
 
 ## Supplementary material
 The supplementary materials and the settings to reproduce the experiments are in https://github.com/AlgoLab/mp3treesim_supp
+
+## We thank for the contributions
+- Michele Zoncheddu [@michelezoncheddu](https://github.com/michelezoncheddu)
