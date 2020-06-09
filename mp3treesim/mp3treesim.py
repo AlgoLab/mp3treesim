@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 
-from itertools import permutations, combinations
+from itertools import combinations
 from collections import defaultdict, Counter
 
 import networkx as nx
@@ -193,7 +193,7 @@ def similarity(tree1, tree2, mode='sigmoid', sigmoid_mult=10.0):
     else:
         labels = set(tree1.label_set) | set(tree2.label_set)
 
-    for triple in permutations(labels, 3):
+    for triple in combinations(labels, 3):
         missing, num, dem = is_equal_struct(triple, tree1.LCA, tree2.LCA)
         numerator += num
         if missing:
