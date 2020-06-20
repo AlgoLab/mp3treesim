@@ -188,6 +188,9 @@ def similarity(tree1, tree2, mode='sigmoid', sigmoid_mult=10.0):
     denominator_i = 0
     denominator_u = 0
 
+    if len(set(tree1.label_set) & set(tree2.label_set)) == 0:
+        return 0.0
+
     if mode == 'intersection':
         labels = set(tree1.label_set) & set(tree2.label_set)
     else:
@@ -247,7 +250,10 @@ def build_tree(T):
 
     for node in T.nodes(data=True):
         id_node = node[0]
-        labels = node[1]['label'].split(',')
+        if 'label' in node[1]:
+            labels = node[1]['label'].split(',')
+        else:
+            labels = node[0].split(',')
         for l in labels:
             label_set.add(l)
             label_to_nodes[l].add(id_node)
