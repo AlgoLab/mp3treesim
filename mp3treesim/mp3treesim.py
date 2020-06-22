@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
 # coding: utf-8
 
+from functools import partial
 from itertools import combinations
 from collections import defaultdict, Counter
 
 import networkx as nx
 import numpy as np
 from pygraphviz import AGraph
+
+from multiprocessing import Pool, set_start_method
 
 
 class Tree:
@@ -161,7 +164,7 @@ def get_nset_sig(x_i, x_u):
     return x_u + sigmoid(x_i) * (x_i - x_u)
 
 
-def similarity(tree1, tree2, mode='sigmoid', sigmoid_mult=10.0):
+def similarity(tree1, tree2, mode='sigmoid', sigmoid_mult=10.0, cores=1):
     """ 
     Compute the similarity score of the two trees.
 
@@ -176,6 +179,7 @@ def similarity(tree1, tree2, mode='sigmoid', sigmoid_mult=10.0):
                  By default is set to 'sigmoid'.
     sigmoid_mult (float): Multiplicator for the 
                  sigmoid calculation.
+    cores (int); Number of cores used for the computation.
 
     Returns: 
     float: Similarity score
@@ -197,13 +201,36 @@ def similarity(tree1, tree2, mode='sigmoid', sigmoid_mult=10.0):
     else:
         labels = set(tree1.label_set) | set(tree2.label_set)
 
-    for triple in combinations(labels, 3):
-        missing, num, dem = is_equal_struct(triple, tree1.LCA, tree2.LCA)
-        numerator += num
-        if missing:
-            denominator_u += dem
-        else:
-            denominator_i += dem
+    combs = combinations(labels, 3)
+
+    if cores <= 0:
+        cores = None
+
+    if cores == 1:
+        for triple in combs:
+            missing, num, dem = is_equal_struct(triple, tree1.LCA, tree2.LCA)
+            numerator += num
+            if missing:
+                denominator_u += dem
+            else:
+                denominator_i += dem
+    else:
+        try:
+            set_start_method("spawn")
+        except RuntimeError:
+            pass
+
+        with Pool(processes=cores) as pool:
+            func = partial(is_equal_struct, LCA1=tree1.LCA, LCA2=tree2.LCA)
+            results = pool.map(func, combs)
+
+            for res in results:
+                missing, num, dem = res
+                numerator += num
+                if missing:
+                    denominator_u += dem
+                else:
+                    denominator_i += dem
 
     similarity_score = 0
     if mode == 'intersection':

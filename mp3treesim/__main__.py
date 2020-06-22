@@ -17,6 +17,8 @@ def main():
                             help='Run MP3-treesim in Union mode.')
     group_mode.add_argument('-g', action='store_true', default=False,
                             help='Run MP3-treesim in Geometric mode.')
+    parser.add_argument('-c', '--cores', action="store", default=1, type=int,
+                        help='Number of cores to be used in computation.')
     parser.add_argument('--labeled-only', action='store_true', default=False,
                         help='Ingore nodes without "label" attribute. ' +
                         'The trees will be interpred as partially-label trees.')
@@ -64,7 +66,7 @@ def main():
     tree2 = mp3.read_dotfile(
         args.trees[1], labeled_only=args.labeled_only, exclude=exclude_t2)
 
-    score = mp3.similarity(tree1, tree2, mode=mode)
+    score = mp3.similarity(tree1, tree2, mode=mode, cores=args.cores)
     print(score)
 
 

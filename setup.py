@@ -6,31 +6,33 @@ long_description = r'''
 Triplet-based similarity score for fully multi-labeled trees with poly-occurring labels.
 
 ```
-    usage: __main__.py [-h] [-i | -u | -g] [--labeled-only]
+usage: mp3treesim [-h] [-i | -u | -g] [-c CORES] [--labeled-only]
                    [--exclude [EXCLUDE [EXCLUDE ...]]]
                    TREE TREE
 
-    MP3 tree similarity measure
+MP3 tree similarity measure
 
-    positional arguments:
-    TREE                  Paths to the trees
+positional arguments:
+  TREE                  Paths to the trees
 
-    optional arguments:
-    -h, --help            show this help message and exit
-    -i                    Run MP3-treesim in Intersection mode.
-    -u                    Run MP3-treesim in Union mode.
-    -g                    Run MP3-treesim in Geometric mode.
-    --labeled-only        Ingore nodes without "label" attribute. The trees will
-                            be interpred as partially-label trees.
-    --exclude [EXCLUDE [EXCLUDE ...]]
-                            String(s) of comma separated labels to exclude from
-                            computation. If only one string is provided the labels
-                            will be excluded from both trees. If two strings are
-                            provided they will be excluded from the respective
-                            tree. E.g.: --exclude "A,D,E" will exclude labels from
-                            both trees; --exclude "A,B" "C,F" will exclude A,B
-                            from Tree 1 and C,F from Tree 2; --exclude "" "C" will
-                            exclude and C from Tree 2 and nothing from Tree 1
+optional arguments:
+  -h, --help            show this help message and exit
+  -i                    Run MP3-treesim in Intersection mode.
+  -u                    Run MP3-treesim in Union mode.
+  -g                    Run MP3-treesim in Geometric mode.
+  -c CORES, --cores CORES
+                        Number of cores to be used in computation.
+  --labeled-only        Ingore nodes without "label" attribute. The trees will
+                        be interpred as partially-label trees.
+  --exclude [EXCLUDE [EXCLUDE ...]]
+                        String(s) of comma separated labels to exclude from
+                        computation. If only one string is provided the labels
+                        will be excluded from both trees. If two strings are
+                        provided they will be excluded from the respective
+                        tree. E.g.: --exclude "A,D,E" will exclude labels from
+                        both trees; --exclude "A,B" "C,F" will exclude A,B
+                        from Tree 1 and C,F from Tree 2; --exclude "" "C" will
+                        exclude and C from Tree 2 and nothing from Tree 1
 
 ```
 
@@ -40,7 +42,7 @@ A detailed description of the module is available on our [github repo](https://g
 
 setuptools.setup(
     name="mp3treesim",
-    version="1.0.5",
+    version="1.0.6",
     author="Simone Ciccolella",
     author_email="s.ciccolella@campus.unimib.it",
     description="Triplet-based similarity score for fully multi-labeled trees with poly-occurring labels",

@@ -83,6 +83,7 @@
                  By default is set to 'sigmoid'.
         sigmoid_mult (float): Multiplicator for the 
                      sigmoid calculation.
+        cores (int); Number of cores used for the computation.
         
         Returns: 
         float: Similarity score
