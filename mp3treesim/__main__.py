@@ -41,30 +41,28 @@ def main():
     exclude_t1 = list()
     exclude_t2 = list()
 
-    if len(args.exclude) == 0:
+    if args.exclude == None:
         exclude_t1 = exclude_t2 = None
-    elif len(args.exclude) == 1:
-        exclude_t1 = exclude_t2 = args.exclude[0].strip().split(',')
-    elif len(args.exclude) == 2:
-        exclude_t1 = args.exclude[0].strip().split(',')
-        exclude_t2 = args.exclude[1].strip().split(',')
-        if len(exclude_t1) == 0:
-            exclude_t1 = None
-        if len(exclude_t2) == 0:
-            exclude_t2 = None
     else:
-        print('Error: --exclude must have 0, 1 or 2 arguments')
-        exit(1)
+        if len(args.exclude) == 0:
+            exclude_t1 = exclude_t2 = None
+        elif len(args.exclude) == 1:
+            exclude_t1 = exclude_t2 = args.exclude[0].strip().split(',')
+        elif len(args.exclude) == 2:
+            exclude_t1 = args.exclude[0].strip().split(',')
+            exclude_t2 = args.exclude[1].strip().split(',')
+            if len(exclude_t1) == 0:
+                exclude_t1 = None
+            if len(exclude_t2) == 0:
+                exclude_t2 = None
+        else:
+            print('Error: --exclude must have 0, 1 or 2 arguments')
+            exit(1)
 
     tree1 = mp3.read_dotfile(
         args.trees[0], labeled_only=args.labeled_only, exclude=exclude_t1)
     tree2 = mp3.read_dotfile(
         args.trees[1], labeled_only=args.labeled_only, exclude=exclude_t2)
-
-    import networkx as nx
-    import matplotlib.pyplot as plt
-    mp3.draw_tree(tree2)
-    plt.show()
 
     score = mp3.similarity(tree1, tree2, mode=mode)
     print(score)
