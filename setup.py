@@ -13,7 +13,7 @@ A detailed description of the module is available on our [github repo](https://g
 
 setuptools.setup(
     name="mp3treesim",
-    version="1.0.3",
+    version="1.0.4",
     author="Simone Ciccolella",
     author_email="s.ciccolella@campus.unimib.it",
     description="Triplet-based similarity score for fully multi-labeled trees with poly-occurring labels",

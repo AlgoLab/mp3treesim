@@ -4,7 +4,7 @@ import argparse
 
 def main():
     parser = argparse.ArgumentParser(
-        description='mp3treesim',  # TODO: fix this
+        description='MP3 tree similarity measure',
         add_help=True)
 
     parser.add_argument('trees', metavar='TREE', nargs=2,
@@ -17,7 +17,16 @@ def main():
                             help='Run MP3-treesim in Union mode.')
     group_mode.add_argument('-g', action='store_true', default=False,
                             help='Run MP3-treesim in Geometric mode.')
-
+    parser.add_argument('--labeled-only', action='store_true', default=False,
+                        help='Ingore nodes without "label" attribute. ' +
+                        'The trees will be interpred as partially-label trees.')
+    parser.add_argument('--exclude', metavar='EXCLUDE', nargs='*', required=False, type=str,
+                        help='String(s) of comma separated labels to exclude from computation. ' +
+                        'If only one string is provided the labels will be excluded from both trees. ' +
+                        'If two strings are provided they will be excluded from the respective tree. ' +
+                        'E.g.: --exclude "A,D,E" will exclude labels from both trees; ' +
+                        '--exclude "A,B" "C,F" will exclude A,B from Tree 1 and C,F from Tree 2; ' +
+                        '--exclude "" "C" will exclude and C from Tree 2 and nothing from Tree 1')
     args = parser.parse_args()
 
     if args.i:
@@ -29,8 +38,33 @@ def main():
     else:
         mode = 'sigmoid'
 
-    tree1 = mp3.read_dotfile(args.trees[0])
-    tree2 = mp3.read_dotfile(args.trees[1])
+    exclude_t1 = list()
+    exclude_t2 = list()
+
+    if len(args.exclude) == 0:
+        exclude_t1 = exclude_t2 = None
+    elif len(args.exclude) == 1:
+        exclude_t1 = exclude_t2 = args.exclude[0].strip().split(',')
+    elif len(args.exclude) == 2:
+        exclude_t1 = args.exclude[0].strip().split(',')
+        exclude_t2 = args.exclude[1].strip().split(',')
+        if len(exclude_t1) == 0:
+            exclude_t1 = None
+        if len(exclude_t2) == 0:
+            exclude_t2 = None
+    else:
+        print('Error: --exclude must have 0, 1 or 2 arguments')
+        exit(1)
+
+    tree1 = mp3.read_dotfile(
+        args.trees[0], labeled_only=args.labeled_only, exclude=exclude_t1)
+    tree2 = mp3.read_dotfile(
+        args.trees[1], labeled_only=args.labeled_only, exclude=exclude_t2)
+
+    import networkx as nx
+    import matplotlib.pyplot as plt
+    mp3.draw_tree(tree2)
+    plt.show()
 
     score = mp3.similarity(tree1, tree2, mode=mode)
     print(score)

@@ -6,6 +6,7 @@ from collections import defaultdict, Counter
 
 import networkx as nx
 import numpy as np
+from pygraphviz import AGraph
 
 
 class Tree:
@@ -226,7 +227,7 @@ def similarity(tree1, tree2, mode='sigmoid', sigmoid_mult=10.0):
     return similarity_score
 
 
-def build_tree(T):
+def build_tree(T, labeled_only=False, exclude=None):
     """
     Builds the MP3-treesim tree representation from a networkx representation.
 
@@ -235,6 +236,9 @@ def build_tree(T):
 
     Parameters:
     T (nx.nx_agraph): Tree in networkx representation
+    labeled_only (bool): If true nodes without attribute `label` 
+    will be ignored, meaning that T is a partially labeled tree.
+    exclude (list(str)): List of labels to exclude from computation
 
     Returns:
     Tree: MP3-treesim tree representation
@@ -250,11 +254,19 @@ def build_tree(T):
 
     for node in T.nodes(data=True):
         id_node = node[0]
-        if 'label' in node[1]:
-            labels = node[1]['label'].split(',')
-        else:
-            labels = node[0].split(',')
+
+        if not 'label' in node[1] and not labeled_only:
+            node[1]['label'] = str(node[0])
+        if not 'label' in node[1] and labeled_only:
+            node[1]['label'] = ''
+            continue
+
+        labels = node[1]['label'].split(',')
         for l in labels:
+            if exclude:
+                if l in exclude:
+                    continue
+
             label_set.add(l)
             label_to_nodes[l].add(id_node)
             node_to_labels[id_node].add(l)
@@ -264,15 +276,19 @@ def build_tree(T):
     return Tree(T, label_to_nodes, node_to_labels, label_set)
 
 
-def read_dotfile(path):
+def read_dotfile(path, labeled_only=False, exclude=None):
     """ 
     Reads a dot file and returns its MP3-treesim tree representation.
 
-    NOTE: the tree must have a attribute `label` for each node. Labels in a node
-    must be separated by a comma.
+    NOTE: the tree should have an attribute `label` for each node. 
+    In case this is not true, the label of the node will be it's ID.    
+    It recommended to use the `label` attribute.
+    Labels in a node must be separated by a comma.
 
     Parameters: 
     path (str): Path to the dot file
+    labeled_only (bool): If true nodes without attribute `label` will be ignored, meaning that T is a partially labeled tree.
+    exclude (list(str)): List of labels to exclude from computation
 
     Returns: 
     Tree: MP3-treesim tree representation
@@ -281,4 +297,61 @@ def read_dotfile(path):
 
     T = nx.DiGraph(nx.drawing.nx_agraph.read_dot(path))
 
-    return build_tree(T)
+    return build_tree(T, labeled_only=labeled_only, exclude=exclude)
+
+
+def read_dotstring(string, labeled_only=False, exclude=None):
+    """ 
+    Reads a string containing a dot graph and returns its MP3-treesim tree representation.
+
+    NOTE: the tree should have an attribute `label` for each node. 
+    In case this is not true, the label of the node will be it's ID.    
+    It recommended to use the `label` attribute.
+    Labels in a node must be separated by a comma.
+
+    Parameters: 
+    string (str): dot representation of the tree
+    labeled_only (bool): If true nodes without attribute `label` will be ignored, meaning that T is a partially labeled tree.
+    exclude (list(str)): List of labels to exclude from computation
+
+    Returns: 
+    Tree: MP3-treesim tree representation
+
+    """
+
+    T = nx.DiGraph(nx.drawing.nx_agraph.from_agraph(AGraph(string=string)))
+
+    return build_tree(T, labeled_only=labeled_only, exclude=exclude)
+
+
+def draw_tree(tree):
+    """ 
+    Draw the tree using networkx's drawing methods.
+
+    NOTE 1: Networlx uses matplotlib to display the tree. If you are using a Notebook-like
+    environment (Jupyter, CoLab) it will be display automatically. 
+    If you are using it from command line it will be necessary to run `plt.show()` to 
+    diplay it.
+
+    NOTE 2: Due to an unreliable behaviour of netxwork and pygraph it is necessary to
+    create a copy of the input tree and loop over the nodes twice. Beware this in case
+    you want to display very large trees.
+
+    Parameters: 
+    tree: MP3-treesim tree representation
+
+    """
+
+    drawtree = nx.convert_node_labels_to_integers(tree.T)
+    labels = nx.get_node_attributes(drawtree, 'label')
+
+    for node in drawtree.nodes(data=True):
+        del node[1]['label']
+
+    try:
+        pos = nx.nx_pydot.pydot_layout(drawtree, prog='dot')
+    except:
+        pos = None
+
+    nx.draw_networkx(
+        drawtree, pos=pos, labels=labels)
