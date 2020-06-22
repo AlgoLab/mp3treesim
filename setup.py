@@ -31,7 +31,6 @@ Triplet-based similarity score for fully multi-labeled trees with poly-occurring
                             both trees; --exclude "A,B" "C,F" will exclude A,B
                             from Tree 1 and C,F from Tree 2; --exclude "" "C" will
                             exclude and C from Tree 2 and nothing from Tree 1
-    ~/Documents/AlgoLab/mp3treesim   master ●✚  
 
 ```
 
