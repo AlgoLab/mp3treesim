@@ -69,7 +69,7 @@
         Parameters: 
         tree: MP3-treesim tree representation
 
-    similarity(tree1, tree2, mode='sigmoid')
+    similarity(tree1, tree2, mode='sigmoid', cores=1)
         Compute the similarity score of the two trees.
         
         Parameters: 

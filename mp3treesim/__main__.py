@@ -18,17 +18,19 @@ def main():
     group_mode.add_argument('-g', action='store_true', default=False,
                             help='Run MP3-treesim in Geometric mode.')
     parser.add_argument('-c', '--cores', action="store", default=1, type=int,
-                        help='Number of cores to be used in computation.')
+                        help='Number of cores to be used in computation. ' +
+                        'Set to 0 to use all the cores available on the machine. ' +
+                        '(Default 1)')
     parser.add_argument('--labeled-only', action='store_true', default=False,
                         help='Ingore nodes without "label" attribute. ' +
                         'The trees will be interpred as partially-label trees.')
-    parser.add_argument('--exclude', metavar='EXCLUDE', nargs='*', required=False, type=str,
+    parser.add_argument('--exclude', nargs='*', required=False, type=str,
                         help='String(s) of comma separated labels to exclude from computation. ' +
                         'If only one string is provided the labels will be excluded from both trees. ' +
                         'If two strings are provided they will be excluded from the respective tree. ' +
                         'E.g.: --exclude "A,D,E" will exclude labels from both trees; ' +
                         '--exclude "A,B" "C,F" will exclude A,B from Tree 1 and C,F from Tree 2; ' +
-                        '--exclude "" "C" will exclude and C from Tree 2 and nothing from Tree 1')
+                        '--exclude "" "C" will exclude C from Tree 2 and nothing from Tree 1')
     args = parser.parse_args()
 
     if args.i:
