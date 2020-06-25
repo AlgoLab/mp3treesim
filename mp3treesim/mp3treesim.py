@@ -355,10 +355,10 @@ def draw_tree(tree):
     """ 
     Draw the tree using networkx's drawing methods.
 
-    NOTE 1: Networlx uses matplotlib to display the tree. If you are using a Notebook-like
+    NOTE 1: Networkx uses matplotlib to display the tree. If you are using a Notebook-like
     environment (Jupyter, CoLab) it will be display automatically. 
     If you are using it from command line it will be necessary to run `plt.show()` to 
-    diplay it.
+    display it.
 
     NOTE 2: Due to an unreliable behaviour of netxwork and pygraph it is necessary to
     create a copy of the input tree and loop over the nodes twice. Beware this in case
