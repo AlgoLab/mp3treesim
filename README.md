@@ -4,7 +4,7 @@
 
 Triplet-based similarity score for fully multi-labeled trees with poly-occurring labels
 
-Link to publication: https://www.biorxiv.org/content/10.1101/2020.04.14.040550v1
+Link to publication: https://doi.org/10.1093/bioinformatics/btaa676
 
 # Tutorial
 
